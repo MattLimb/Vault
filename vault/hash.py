@@ -1,14 +1,14 @@
 import hashlib
 import pathlib
 
-from .excptions import VaultIOException
+from .excptions import VaultIOException, HashError
 
 class HashTool:
     """Hash files/strings
     """
     BUFFER_SIZE = 65536
 
-    def __init__(self, algrithm, **kwargs):
+    def __init__(self, algorithm, **kwargs):
         """Setup initial settings for hashing files or strings
 
         Params:
@@ -16,7 +16,7 @@ class HashTool:
         kwargs    : Optional settings that can be used to tweak how the hash is created.
         """
 
-        self.algorithm = algrithm
+        self.algorithm = algorithm
         self.vault = kwargs.get("vault")
 
     def hash_file(self, filepath):
@@ -28,14 +28,18 @@ class HashTool:
         Returns:
         The hexadecimal hash of the file.
         """
-        hash = hashlib.new(self.algorithm)
+        try:
+            hash = hashlib.new(self.algorithm)
+        except ValueError as e:
+            raise HashError(f"Error: Unknown hash algorithm \"{self.alorithm}\".", self.vault)
+
         filepath = pathlib.Path(filepath)
 
         if filepath.exists() == False:
             raise VaultIOException(f"Given filepath \"{filepath}\" does not exist.")
         if filepath.is_file() != True:
             raise VaultIOException(f"Given filepath \"{filepath}\" is not a file.", self.vault)
-
+        
         with filepath.open("rb") as f:
             read = True
             while read:
@@ -56,8 +60,11 @@ class HashTool:
         Returns:
         The hexadecimal hash of the string.
         """
-        hash = hashlib.new(self.algorithm)
-        
+        try:
+            hash = hashlib.new(self.algorithm)
+        except ValueError as e:
+            raise HashError(f"Error: Unknown hash algorithm \"{self.algorithm}\".", self.vault)
+
         hash.update(data.encode())
 
         return hash.hexdigest()

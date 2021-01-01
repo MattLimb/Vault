@@ -9,6 +9,8 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 def cli():
+    """Welcome to Vault
+    """
     pass
 
 from .cli.cli_generate import generate

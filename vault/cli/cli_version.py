@@ -23,7 +23,7 @@ def version(debug, output):
     
     if debug:
         system_info = platform.uname()
-        version_string = f"{version_string} - Python {platform.python_version()}/{platform.python_implementation()} - {system_info.node} on {system_info.system} {system_info.release} version {system_info.version}"
+        version_string = f"{version_string} - {platform.python_implementation()}/Python {platform.python_version()} running on {system_info.node} ({system_info.system} {system_info.release} version {system_info.version})"
 
     Outputs(format_=output.lower()).write(dict(
         type="normal",

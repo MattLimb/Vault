@@ -1,15 +1,12 @@
 from .cli.cli_outputs import Outputs
+from .cli.cli_exceptions import VaultException
 
 class VaultIOException(IOError):
     """The base IO Exception for Vault
     """
-    def __init__(self, message, vault):
-        """Override the base exception to do our own thing.
-        """
-        super().__init__(message)
+    pass
 
-        Outputs().write({
-            "error": 1,
-            "message": message,
-            "vault": vault            
-        })
+class HashError(VaultException):
+    """Errors regarding the Hash
+    """
+    pass
