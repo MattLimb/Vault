@@ -2,6 +2,8 @@ from colorama import Fore, Back, Style
 import json
 import click
 
+__author__ = "Matt Limb <matt.limb17@gmail.com>"
+
 """
 The data field in _text, _json and _xml should be given in the following format:
 
