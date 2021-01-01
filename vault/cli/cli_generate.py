@@ -1,4 +1,11 @@
+import pathlib
+import string
+import random
+import uuid
+from vault.hash import HashTool
 import click
+from cryptography.fernet import Fernet
+from .cli_outputs import Outputs
 
 __author__ = "Matt Limb <matt.limb17@gmail.com>"
 
@@ -10,9 +17,9 @@ def generate():
 
 @generate.command("password", help="Generte a random secure password.")
 @click.option("-d", "--debug", "debug", is_flag=True, help="Enable debug mode")
-@click.option("-o", "--output", "output", type=click.Choice(["TEXT", "JSON", "XML"], case_sensitive=False), help="Enable debug mode")
+@click.option("-o", "--output", "output", type=click.Choice(["TEXT", "JSON", "XML"], case_sensitive=False), default="TEXT", help="Enable debug mode")
 @click.argument("length", default=20, type=int)
-def gen_password(length, debug, ouput):
+def generate_password(length, debug, output):
     """Generate a random password.
 
     Options:
@@ -25,12 +32,28 @@ def gen_password(length, debug, ouput):
     Returns:
     The randomly generated password as a string.
     """
-    pass
+    
+    new_password = ""
+    choice_string = random.choice(
+        [
+            f"{string.ascii_letters}{string.punctuation}",
+            string.ascii_letters
+        ]
+    )
+    
+    for _ in range(length+1):
+        new_password += random.choice(choice_string)
+
+    Outputs(format_=output.lower()).write(dict(
+        type="normal",
+        error=0,
+        message=new_password
+    ))
 
 @generate.command("uuid", help="Generte a random uuid.")
 @click.option("-d", "--debug", "debug", is_flag=True, help="Enable debug mode")
 @click.option("-o", "--output", "output", type=click.Choice(["TEXT", "JSON", "XML"], case_sensitive=False), default="TEXT", help="Format to output to the terminal in")
-def uuid(debug, output):
+def generate_uuid(debug, output):
     """Generate a random uuid.
 
     Options:
@@ -40,13 +63,17 @@ def uuid(debug, output):
     Returns:
     The randomly generated uuid as a string.
     """
-    pass
+    Outputs(format_=output.lower()).write(dict(
+        type="normal",
+        error=0,
+        message=str(uuid.uuid4())
+    ))
 
 
 @generate.command("encryption-key", help="Generte a random encryption key.")
 @click.option("-d", "--debug", "debug", is_flag=True, help="Enable debug mode")
 @click.option("-o", "--output", "output", type=click.Choice(["TEXT", "JSON", "XML"], case_sensitive=False), default="TEXT", help="Format to output to the terminal in")
-def encryption_key(debug, output):
+def generate_encryption_key(debug, output):
     """Generate a random encryption key.
 
     Options:
@@ -56,16 +83,20 @@ def encryption_key(debug, output):
     Returns:
     The randomly generated encryption key as a string.
     """
-    pass
+    Outputs(format_=output.lower()).write(dict(
+        type="normal",
+        error=0,
+        message=str(Fernet.generate_key().decode())
+    ))
 
 @generate.command("hash", help="Generte a hash of a file or string.")
-@click.option("-f", "--file", is_flag=True, help="The given string is a filename.")
-@click.option("-s", "--string", is_flag=True, help="The given string is a string.")
+@click.option("-f", "--file", "input_type", flag_value="file", help="The given string is a filename.")
+@click.option("-s", "--string", "input_type", flag_value="string", help="The given string is a string.")
 @click.option("-d", "--debug", "debug", is_flag=True, help="Enable debug mode")
 @click.option("-o", "--output", "output", type=click.Choice(["TEXT", "JSON", "XML"], case_sensitive=False), default="TEXT", help="Format to output to the terminal in")
 @click.argument("algorithm", nargs=1, type=str)
 @click.argument("input", nargs=-1, type=str)
-def encryption_key(file, string, algorithm, input, debug, output):
+def generate_hash(input_type, algorithm, input, debug, output):
     """Generate a hash from a string or filepath.
 
     Options:
@@ -81,4 +112,21 @@ def encryption_key(file, string, algorithm, input, debug, output):
     Returns:
     The hash of the string or filepath.
     """
-    pass
+
+    for some_input in input:
+        h = HashTool(algorithm, vault=None)
+        hash_function = h.hash_string
+
+        if input_type == "file":
+            hash_function = h.hash_file
+        elif input_type == "string":
+            hash_function = h.hash_string
+        else:
+            if pathlib.Path(some_input).exists():
+                hash_function = h.hash_file
+            
+        Outputs(format_=output.lower()).write(data=dict(
+            type="normal",
+            error=0,
+            message=f"{algorithm.upper()} : {hash_function(some_input)}"
+          ))

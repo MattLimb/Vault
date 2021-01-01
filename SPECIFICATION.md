@@ -10,6 +10,7 @@ All 0.* versions are going to be alpha builds. A 1.0 beta will be released after
   - [Vault Data](#vault-data)
     - [User Information](#user-information)
     - [Vault Information](#vault-information)
+  - [Logging](#logging)
   - [Vault Ouputs](#vault-ouputs)
     - [0.1 - Text](#01---text)
     - [0.1 - JSON](#01---json)
@@ -145,7 +146,9 @@ Vault information is information that pertains to a specific vault. This informa
 This information is to be stored in a SQLite3 Database stored in the `.vault/files/<uuid>.db` folder in the home directory, under the UUID of the vault.
 
 ---
+## Logging
 
+---
 ## Vault Ouputs
 
 This applies to everything except the help commands.
