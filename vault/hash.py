@@ -51,7 +51,7 @@ class HashTool:
                     read = False
         return hash.hexdigest()
 
-    def hash_string(self, data):
+    def hash_string(self, data, salt=None):
         """Hash arbitary strings of varying size
 
         Params:
@@ -64,7 +64,10 @@ class HashTool:
             hash = hashlib.new(self.algorithm)
         except ValueError as e:
             raise HashError(f"Error: Unknown hash algorithm \"{self.algorithm}\".", self.vault)
-
-        hash.update(data.encode())
+        
+        if salt == None:
+            hash.update(data.encode())
+        else:
+            hash.update(f"{data}{salt}".encode())
 
         return hash.hexdigest()

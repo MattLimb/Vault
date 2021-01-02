@@ -1,5 +1,6 @@
 from .cli_outputs import Outputs
 from vault import __version__ as vault_version
+from vault import __package__ as package_name
 
 import click
 import platform
@@ -19,7 +20,7 @@ def version(debug, output):
     Returns:
     The version information
     """
-    version_string = f"Vault {vault_version}"
+    version_string = f"{package_name.title()} {vault_version}"
     
     if debug:
         system_info = platform.uname()

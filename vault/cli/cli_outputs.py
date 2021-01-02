@@ -16,6 +16,8 @@ The data field in _text, _json and _xml should be given in the following format:
     "message": "Some message to show the user",
     "vault": null
     "data_about": "vault|group|folder|file"
+    "seperate_data": true|false,
+    "initial_line": true|false,
     "data": [
         {
             "keys": "values"
@@ -61,8 +63,14 @@ class Outputs:
             click.echo(f"{out_colour}{data.get('message')}")
             Style.RESET_ALL
         
+        if data.get("initial_line"):
+            click.echo("")
+        
         if data.get("data"):
             for item in data.get("data"):
+                if data.get("seperate_data", False):
+                    click.echo("")
+                    
                 for key, value in item.items():
                     click.echo(f"{out_colour}{key}{' '*(15-len(key))}: {value}")
 

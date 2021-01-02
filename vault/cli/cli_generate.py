@@ -1,11 +1,13 @@
+import hashlib
 import pathlib
 import string
 import random
 import uuid
-from vault.hash import HashTool
 import click
-from cryptography.fernet import Fernet
+
 from .cli_outputs import Outputs
+from vault.hash import HashTool
+from vault.encryption import Encryption
 
 __author__ = "Matt Limb <matt.limb17@gmail.com>"
 
@@ -86,7 +88,7 @@ def generate_encryption_key(debug, output):
     Outputs(format_=output.lower()).write(dict(
         type="normal",
         error=0,
-        message=str(Fernet.generate_key().decode())
+        message=str(Encryption.generate_key().decode())
     ))
 
 @generate.command("hash", help="Generte a hash of a file or string.")
@@ -112,6 +114,13 @@ def generate_hash(input_type, algorithm, input, debug, output):
     Returns:
     The hash of the string or filepath.
     """
+    if algorithm not in hashlib.algorithms_available:
+        Outputs(format_=output.lower()).write(data=dict(
+            type="error",
+            error=0,
+            message=f"Error: {algorithm.upper()} is not supported"
+          ))
+        quit(1)
 
     for some_input in input:
         h = HashTool(algorithm, vault=None)
