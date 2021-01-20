@@ -186,15 +186,23 @@ def vault_rename(debug, output, confirm, password, vault, new_name):
     if vault.verify_password(password):
         prompt_text = f"You are about to rename \"{vault_old}\" to \"{new_name}\". Renaming Vaults is irreversable."
         if confirm_user(prompt_text, confirm):
-            vault.name = new_name
-            vault.update_modified()
-            config.update_vault(vault)
+            if len(config.get_vault(new_name)) == 0:
+                vault.name = new_name
+                vault.update_modified()
+                config.update_vault(vault)
 
-            Outputs(format_=output.lower()).write(dict(
-                type="success",
-                error=0,
-                message=f"Vault {vault_old} renamed to {new_name}"
-            ))
+                Outputs(format_=output.lower()).write(dict(
+                    type="success",
+                    error=0,
+                    message=f"Vault {vault_old} renamed to {new_name}"
+                ))
+            else:
+                Outputs(format_=output.lower()).write(dict(
+                    type="error",
+                    error=0,
+                    message=f"Error: A Vault with the name or uuid {new_name}"
+                ))
+                quit(1)
         else:
             Outputs(format_=output.lower()).write(dict(
                 type="error",
@@ -269,7 +277,7 @@ def vault_list(debug, output, info):
         Outputs(format_=output.lower()).write(output_dict)
     
 
-@vault.command("show", help="Change the friendly name of a Vault.")
+@vault.command("show", help="Show detailed information about a Vault.")
 @click.option("-d", "--debug", "debug", is_flag=True, help="Enable debug mode")
 @click.option("-o", "--output", "output", type=click.Choice(["TEXT", "JSON", "XML"], case_sensitive=False), default="text", help="Enable debug mode")
 @click.argument("vault_name", type=str, nargs=-1)
@@ -330,7 +338,7 @@ def vault_show(debug, output, vault_name):
 @vault.command("default", help="Change the friendly name of a Vault.")
 @click.option("-d", "--debug", "debug", is_flag=True, help="Enable debug mode")
 @click.option("-o", "--output", "output", type=click.Choice(["TEXT", "JSON", "XML"], case_sensitive=False), default="text", help="Enable debug mode")
-@click.argument("vault_name", type=str, nargs=-1, default=None)
+@click.argument("vault_name", type=str, nargs=1, default=None)
 def vault_default(debug, output, vault_name):
     """Generate a new vault at the specified location.
 

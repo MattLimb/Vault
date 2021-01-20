@@ -46,7 +46,7 @@ All 0.* versions are going to be alpha builds. A 1.0 beta will be released after
     - [`vault backup <vault_name>` - WIP](#vault-backup-vault_name---wip)
   - [### `vault archive <vault_name>`  - WIP](#-vault-archive-vault_name----wip)
   - [Group Actions](#group-actions)
-    - [0.2 - `group add <group_name>`](#02---group-add-group_name)
+    - [0.2 - `group new <group_name>`](#02---group-new-group_name)
       - [Options](#options-7)
       - [Arguments](#arguments-4)
       - [Output](#output-5)
@@ -64,6 +64,7 @@ All 0.* versions are going to be alpha builds. A 1.0 beta will be released after
       - [Output](#output-8)
     - [0.3 - `group file add <group_name> <file_name>` - WIP](#03---group-file-add-group_name-file_name---wip)
     - [0.3 - `group file delete <group_name> <file_name>` - WIP](#03---group-file-delete-group_name-file_name---wip)
+    - [0.3 - `group file show <group_name> <file_name>` - WIP](#03---group-file-show-group_name-file_name---wip)
   - [File/Folder Actions](#filefolder-actions)
     - [0.3 - `file add <file_name>`](#03---file-add-file_name)
       - [Options](#options-11)
@@ -557,7 +558,7 @@ Error Messages
 
 ## Group Actions
 
-### 0.2 - `group add <group_name>`
+### 0.2 - `group new <group_name>`
 
 Group add will add a new group to the Vault. These are going to be stored in the SQLite DB of the Vault. 
 
@@ -783,6 +784,8 @@ Error Messages:
 ### 0.3 - `group file add <group_name> <file_name>` - WIP
 
 ### 0.3 - `group file delete <group_name> <file_name>` - WIP
+
+### 0.3 - `group file show <group_name> <file_name>` - WIP
 
 ## File/Folder Actions
 

@@ -56,6 +56,15 @@ class Vault:
 
     @staticmethod
     def new(filepath, password, name=None, default=False):
+        """Create a new Vault
+
+        Params:
+        filepath: The filepath of the Vault
+        password: The Password for the Vault
+        name [optional]: The name of the vault
+        default [optional]: Set Vault as default
+        """
+        
         filepath = pathlib.Path(filepath)
         nonce = os.urandom(32)
         key = Encryption.master_key(password, nonce)
