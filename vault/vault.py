@@ -12,14 +12,13 @@ from .hash import HashTool
 class Vault:
     """Class representing a Vault
     """
-    def __init__(self, uuid, name, filepath, key, nonce, sanity, default, added, modified):
+    def __init__(self, uuid, name, filepath, nonce, sanity, default, added, modified):
         """Setup the default information needed for Vault operations
         """
         self.uuid = uuid
         self.name = name
         self.filepath = pathlib.Path(filepath)
         self.nonce = binascii.unhexlify(nonce.encode())
-        self.key = binascii.unhexlify(key.encode())
         self.sanity = sanity
         self.default = default
         self.added = datetime.fromtimestamp(added)
@@ -80,7 +79,6 @@ class Vault:
             name=name,
             filepath=str(filepath.resolve()),
             nonce=binascii.hexlify(nonce).decode(),
-            key=binascii.hexlify(key).decode(),
             sanity=sanity,
             default=default,
             added=added,

@@ -17,11 +17,13 @@ from .cli.cli_generate import generate
 from .cli.cli_vault import vault
 from .cli.cli_version import version
 from .cli.cli_group import group_main
+from .cli.cli_file import file_main
 
 cli.add_command(generate)
 cli.add_command(vault)
 cli.add_command(version)
 cli.add_command(group_main)
+cli.add_command(file_main)
 
 if __name__ == "__main__":
     cli(prog_name="vault")

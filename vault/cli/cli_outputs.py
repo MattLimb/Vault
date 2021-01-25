@@ -83,7 +83,22 @@ class Outputs:
         
         if data.get("type"):
             del data["type"]
+        
+        if data.get("seperate_data"):
+            del data["seperate_data"]
 
+        new_data = []
+
+        for item in data.get("data"):
+            new_item = {}
+        
+            for key, value in item.items():
+                new_item[key.lower().replace(" ", "_")] = str(value)
+        
+            new_data.append(new_item)
+
+        data["data"] = new_data
+        
         click.echo(json.dumps(data, indent=2))
 
     def _xml(self, data:dict) -> None:
@@ -110,15 +125,13 @@ class Outputs:
 
             for item in data.get("data"):
                 new_item = SubElement(data_elm, data_about)
-                new_item.attrib["name"] = data.get(data_about)
-                del item[data_about]
 
                 for key, value in item.items():
-                    sub_elm = SubElement(new_item, key)
-                    sub_elm.text = value
+                    sub_elm = SubElement(new_item, key.lower().replace(" ", "_"))
+                    sub_elm.text = str(value)
 
-        as_str = tostring(output, "utf-8")
-        click.echo(minidom.parseString(as_str).toprettyxml())
+        as_str = tostring(output, "utf-8").decode() 
+        click.echo(minidom.parseString(as_str).toprettyxml(indent="  "))
 
     def write(self, data:dict) -> None:
         """Write the data to the terminal in the right format.

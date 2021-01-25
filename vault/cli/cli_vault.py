@@ -3,7 +3,6 @@ import click
 import pathlib
 import os
 
-from .cli_exceptions import VaultExists, VaultNotExists, VaultPasswordFailure
 from ..vault import Vault
 from ..vault_config import VaultConfig
 
@@ -259,7 +258,7 @@ def vault_list(debug, output, info):
                     {   
                         "Vault": item.name,
                         "UUID":item.uuid,
-                        "Location":item.filepath,
+                        "Location": str(item.filepath),
                         "Is Default": item.default,
                         "Added": str(item.added),
                         "Last Modified": str(item.modified)
@@ -324,8 +323,8 @@ def vault_show(debug, output, vault_name):
                 data=[
                     {   
                         "Vault": item.name,
-                        "UUID":item.uuid,
-                        "Location":item.filepath,
+                        "UUID": item.uuid,
+                        "Location": str(item.filepath),
                         "Is Default": item.default,
                         "Added": str(item.added),
                         "Last Modified": str(item.modified)

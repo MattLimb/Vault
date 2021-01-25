@@ -1,13 +1,9 @@
-from click.decorators import group
-from sqlalchemy.sql.elements import Grouping
-from sqlalchemy.sql.expression import false
-from vault.encryption import Encryption
-from sqlalchemy.sql.sqltypes import _resolve_value_to_type
-from vault.cli.cli_outputs import Outputs
 import click
 import pathlib
 import os
 
+from .cli_outputs import Outputs
+from ..encryption import Encryption
 from ..vault_config import VaultConfig
 from ..vault_database import VaultDatabase
 from ..vault_group import VaultGroup
@@ -115,8 +111,6 @@ def group_new(debug, output,vault, password, group_name):
             message=f"Error: Password is not correct for this Vault"
         ))
         quit(1)
-    
-
 
 @group_main.command("delete", help="Delete a group from a Vault")
 @click.option("-d", "--debug", "debug", is_flag=True, help="Enable debug mode")

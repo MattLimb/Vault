@@ -804,7 +804,7 @@ This will gather all the information needed for storing the file in the files da
 | `-v`/`--vault`     | `str` | The vault name                                       |
 | `-f`/`--file-name` | `str` | The filename to store in the database                |
 | `-g`/`--group`     | `str` | The group to add the file too                        |
-| `-r`/`--recursive` | `str` | Add all files found in this folder to the Vault      |
+| `-R`/`--recursive` | `str` | Add all files found in this folder to the Vault      |
 | `-r`/`--remove`    | `str` | Delete the original file once encrypted in the Vault |
 
 #### Arguments
