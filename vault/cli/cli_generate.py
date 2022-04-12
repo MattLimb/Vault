@@ -137,5 +137,5 @@ def generate_hash(input_type, algorithm, input, debug, output):
         Outputs(format_=output.lower()).write(data=dict(
             type="normal",
             error=0,
-            message=f"{algorithm.upper()} : {hash_function(some_input)}"
+            message={ algorithm.upper() : hash_function(some_input) }
           ))

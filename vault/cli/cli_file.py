@@ -153,12 +153,6 @@ def file_new(debug, output,vault, group, remove, password, filepath):
                 message=f"Added {f.filename} to Vault {working_vault.name}"
             ))
         
-        ## Need to add 
-            # 1) Add all files to vault
-            # 2) Add groups to files
-            # 3) Add the recursive ability
-            # 4) Create extension folders in the actual Vault
-        
     else:
         Outputs(format_=output.lower()).write(dict(
             type="error",

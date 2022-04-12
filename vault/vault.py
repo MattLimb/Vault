@@ -35,7 +35,6 @@ class Vault:
             filepath=str(self.filepath),
             nonce=binascii.hexlify(self.nonce).decode(),
             sanity=self.sanity,
-            key=binascii.hexlify(self.key).decode(),
             default=self.default,
             added=self.added.timestamp(),
             modified=self.modified.timestamp()

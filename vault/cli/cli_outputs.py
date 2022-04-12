@@ -1,5 +1,6 @@
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom import minidom
+from click.utils import echo
 from colorama import Fore, Back, Style
 import json
 import click
@@ -13,7 +14,7 @@ The data field in _text, _json and _xml should be given in the following format:
 {
     "type": "success|error|normal",
     "error": 0,
-    "message": "Some message to show the user",
+    "message": "Some message to show the user" | { "key": "value" },
     "vault": null
     "data_about": "vault|group|folder|file"
     "seperate_data": true|false,
@@ -58,10 +59,16 @@ class Outputs:
             out_colour = Fore.GREEN
         else:
             out_colour = Fore.WHITE
-
-        if data.get("message"):
-            click.echo(f"{out_colour}{data.get('message')}")
-            Style.RESET_ALL
+        
+        if "message" in data.keys():
+            message = data.get("message")
+            if type(message) == str:
+                click.echo(f"{out_colour}{data.get('message')}")
+                Style.RESET_ALL
+            elif type(message) == dict:
+                for key, value in message.items():
+                    click.echo(f"{out_colour}{key}: {value}")
+                    Style.RESET_ALL
         
         if data.get("initial_line"):
             click.echo("")
@@ -87,17 +94,17 @@ class Outputs:
         if data.get("seperate_data"):
             del data["seperate_data"]
 
-        new_data = []
+        if "data" in data.keys():
+            new_data = []
+            for item in data.get("data"):
+                new_item = {}
+            
+                for key, value in item.items():
+                    new_item[key.lower().replace(" ", "_")] = str(value)
+            
+                new_data.append(new_item)
 
-        for item in data.get("data"):
-            new_item = {}
-        
-            for key, value in item.items():
-                new_item[key.lower().replace(" ", "_")] = str(value)
-        
-            new_data.append(new_item)
-
-        data["data"] = new_data
+            data["data"] = new_data
         
         click.echo(json.dumps(data, indent=2))
 
@@ -111,9 +118,16 @@ class Outputs:
 
         err = SubElement(output, "error")
         err.text = str(data.get("error"))
-        
+
         message = SubElement(output, "message")
-        message.text = str(data.get("message"))
+        if "message" in data.keys():
+            msg = data.get("message")
+            if type(msg) == str:
+                message.text = str(data.get("message"))
+            elif type(msg) == dict:
+                for key, value in msg.items():
+                    sub_mess = SubElement(message, str(key).lower())
+                    sub_mess.text = str(value)
         
         if data.get("vault"):
             vault = SubElement(output, "vault")
