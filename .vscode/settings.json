@@ -1,0 +1,5 @@
+{
+    "ruff.format.preview": true,
+    "ruff.lineLength": 100,
+    "editor.defaultFormatter": "charliermarsh.ruff"
+}
